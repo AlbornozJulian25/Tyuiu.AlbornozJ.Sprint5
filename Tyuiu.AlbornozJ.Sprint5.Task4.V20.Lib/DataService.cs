@@ -10,8 +10,8 @@ namespace Tyuiu.AlbornozJ.Sprint5.Task4.V20.Lib
         public double LoadFromDataFile(string path)
         {
             string strX = File.ReadAllText(path);
-            double x = Convert.ToDouble(strX);
-                        
+            double x = Convert.ToDouble(strX, System.Globalization.CultureInfo.InvariantCulture);
+
             double numerator = Math.Pow(x, 2);
             double denominator = Math.Sin(x);
                         
