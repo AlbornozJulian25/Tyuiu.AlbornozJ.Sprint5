@@ -13,37 +13,51 @@ namespace Tyuiu.AlbornozJ.Sprint5.Task7.V23.Lib
             string tempPathForSaveFile = Path.GetTempPath();
             string pathSaveFile = Path.Combine(tempPathForSaveFile, "OutPutDataFileTask7V23.txt");
 
-            FileInfo fileInfo = new FileInfo(pathSaveFile);
-            bool fileExists = fileInfo.Exists;
-
-            if (fileExists)
+            if (File.Exists(pathSaveFile))
             {
                 File.Delete(pathSaveFile);
             }
 
-            string text = File.ReadAllText(path, Encoding.UTF8);
+            string[] lines = File.ReadAllLines(path, Encoding.UTF8);
 
-            // Eliminar caracteres cirílicos (rusos)
-            string newText = RemoveCyrillicCharacters(text);
-
-            File.AppendAllText(pathSaveFile, newText, Encoding.UTF8);
-
-            return pathSaveFile;
-        }
-
-        private string RemoveCyrillicCharacters(string text)
-        {
-            StringBuilder result = new StringBuilder();
-
-            foreach (char c in text)
+            using (StreamWriter writer = new StreamWriter(pathSaveFile, false, Encoding.UTF8))
             {
-                if (!IsCyrillic(c))
+                foreach (string line in lines)
                 {
-                    result.Append(c);
+                    string processedLine = ProcessLine(line);
+                    if (!string.IsNullOrWhiteSpace(processedLine))
+                    {
+                        writer.WriteLine(processedLine);
+                    }
                 }
             }
+            return pathSaveFile;
+        }
+        private string ProcessLine(string line)
+        {
+            StringBuilder result = new StringBuilder();
+            bool lastWasSpace = false;
 
-            return result.ToString();
+            foreach (char c in line)
+            {
+                if (!IsCyrillic(c))
+                {                    
+                    if (char.IsWhiteSpace(c))
+                    {
+                        if (!lastWasSpace && result.Length > 0)
+                        {
+                            result.Append(' ');
+                            lastWasSpace = true;
+                        }
+                    }
+                    else
+                    {
+                        result.Append(c);
+                        lastWasSpace = false;
+                    }
+                }
+            }                        
+            return result.ToString().Trim();
         }
 
         private bool IsCyrillic(char c)
