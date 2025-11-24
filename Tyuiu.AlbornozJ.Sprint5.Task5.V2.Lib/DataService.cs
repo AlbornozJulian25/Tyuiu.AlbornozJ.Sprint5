@@ -13,20 +13,22 @@ namespace Tyuiu.AlbornozJ.Sprint5.Task5.V2.Lib
             double sum = 0;
             int count = 0;
 
-            using (StreamReader reader = new StreamReader(path))
+            string fileContent = File.ReadAllText(path);
+                        
+            string[] numbers = fileContent.Split(new char[] { ',', ' ', '\t', '\n', '\r' },
+                                               StringSplitOptions.RemoveEmptyEntries);
+
+            foreach (string numberStr in numbers)
             {
-                string line;
-                while ((line = reader.ReadLine()) != null)
-                {                    
-                    double number = Convert.ToDouble(line, CultureInfo.InvariantCulture);
-                                        
-                    if (number > 0)
-                    {
-                        sum += number;
-                        count++;
-                    }
+                double number = Convert.ToDouble(numberStr, CultureInfo.InvariantCulture);
+
+                if (number > 0)
+                {
+                    sum += number;
+                    count++;
                 }
-            }                        
+            }
+
             if (count > 0)
             {
                 double average = sum / count;
