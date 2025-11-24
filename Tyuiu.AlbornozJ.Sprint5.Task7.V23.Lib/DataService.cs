@@ -33,6 +33,7 @@ namespace Tyuiu.AlbornozJ.Sprint5.Task7.V23.Lib
             }
             return pathSaveFile;
         }
+
         private string ProcessLine(string line)
         {
             StringBuilder result = new StringBuilder();
@@ -41,7 +42,7 @@ namespace Tyuiu.AlbornozJ.Sprint5.Task7.V23.Lib
             foreach (char c in line)
             {
                 if (!IsCyrillic(c))
-                {                    
+                {
                     if (char.IsWhiteSpace(c))
                     {
                         if (!lastWasSpace && result.Length > 0)
@@ -56,13 +57,33 @@ namespace Tyuiu.AlbornozJ.Sprint5.Task7.V23.Lib
                         lastWasSpace = false;
                     }
                 }
-            }                        
-            return result.ToString().Trim();
+            }
+
+            
+            string cleanedResult = RemoveSpacesBeforePunctuation(result.ToString());
+            return cleanedResult.Trim();
         }
 
         private bool IsCyrillic(char c)
         {
             return (c >= 'А' && c <= 'я') || c == 'ё' || c == 'Ё';
+        }
+
+        
+        private string RemoveSpacesBeforePunctuation(string text)
+        {
+            if (string.IsNullOrEmpty(text))
+                return text;
+
+            
+            text = text.Replace(" .", ".");
+            text = text.Replace(" ,", ",");
+            text = text.Replace(" !", "!");
+            text = text.Replace(" ?", "?");
+            text = text.Replace(" ;", ";");
+            text = text.Replace(" :", ":");
+
+            return text;
         }
     }
 }
