@@ -11,8 +11,7 @@ namespace Tyuiu.AlbornozJ.Sprint5.Task6.V14.Lib
         {
             int count = 0;
             string text = File.ReadAllText(path);
-
-            // Caracteres de puntuación a contar
+                        
             char[] punctuationMarks = { '.', ',', '!', '?', ';', ':', '-', '(', ')', '[', ']', '{', '}', '"', '\'' };
 
             foreach (char c in text)
